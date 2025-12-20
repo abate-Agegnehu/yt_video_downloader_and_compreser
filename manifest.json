@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "YT Video Downloader",
+  "version": "1.0.0",
+  "description": "Adds a quick-download button on YouTube watch pages.",
+  "permissions": ["downloads", "scripting", "tabs"],
+  "host_permissions": ["https://www.youtube.com/*", "http://localhost:3000/*"],
+  "action": {
+    "default_title": "Download YouTube video",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch*"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

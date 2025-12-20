@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>YT Video Downloader</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 12px 14px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #0f172a;
+        color: #e5e7eb;
+        min-width: 260px;
+      }
+
+      h1 {
+        font-size: 14px;
+        margin: 0 0 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      h1 span.logo {
+        display: inline-flex;
+        width: 18px;
+        height: 18px;
+        border-radius: 6px;
+        background: radial-gradient(circle at 30% 30%, #f97316, #ef4444 55%, #991b1b);
+      }
+
+      p {
+        margin: 0 0 10px;
+        font-size: 12px;
+        color: #9ca3af;
+      }
+
+      .url {
+        font-size: 11px;
+        padding: 6px 8px;
+        border-radius: 6px;
+        background: #020617;
+        border: 1px solid #1f2937;
+        color: #e5e7eb;
+        word-break: break-all;
+        margin-bottom: 10px;
+        max-height: 60px;
+        overflow-y: auto;
+      }
+
+      button {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: none;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        box-shadow: 0 8px 18px rgba(22, 163, 74, 0.28);
+        transition: transform 0.08s ease, box-shadow 0.08s ease,
+          filter 0.08s ease;
+      }
+
+      button:hover {
+        filter: brightness(1.03);
+        box-shadow: 0 10px 22px rgba(22, 163, 74, 0.35);
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);
+      }
+
+      button:disabled {
+        background: #1f2937;
+        color: #6b7280;
+        box-shadow: none;
+        cursor: default;
+      }
+
+      .status {
+        margin-top: 8px;
+        font-size: 11px;
+        color: #9ca3af;
+      }
+
+      .status.ok {
+        color: #22c55e;
+      }
+
+      .status.error {
+        color: #f97316;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      <span class="logo"></span>
+      YT Video Downloader
+    </h1>
+    <p id="desc">Fetching active YouTube tab…</p>
+    <div id="url" class="url"></div>
+    <button id="downloadBtn" disabled>Download Video</button>
+    <div id="status" class="status"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
+
+

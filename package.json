@@ -1,0 +1,16 @@
+{
+  "name": "yt_video_downloader",
+  "version": "1.0.0",
+  "description": "This is a simple Chrome/Chromium browser extension that helps you quickly send the current YouTube video URL to an external download service.",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "ytdl-core": "^4.11.5"
+  }
+}
