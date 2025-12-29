@@ -29,21 +29,40 @@ async function init() {
 
   btn.addEventListener("click", async () => {
     btn.disabled = true;
-    statusEl.textContent = "Preparing download…";
+    statusEl.textContent = "Opening preview…";
     statusEl.className = "status";
 
     try {
-      await chrome.runtime.sendMessage({
-        type: "DOWNLOAD_YT_VIDEO",
-        videoUrl: tab.url,
+      // Extract video title from the page if possible
+      const [result] = await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        function: () => {
+          const titleEl = document.querySelector(
+            "h1.ytd-watch-metadata yt-formatted-string, h1.title yt-formatted-string, h1.ytd-video-primary-info-renderer"
+          );
+          return titleEl ? titleEl.textContent.trim() : "YouTube Video";
+        },
       });
-      statusEl.textContent = "Download started in your browser.";
-      statusEl.className = "status ok";
-      window.close();
+
+      const videoTitle = result?.result || "YouTube Video";
+
+      const response = await chrome.runtime.sendMessage({
+        type: "SHOW_PREVIEW",
+        videoUrl: tab.url,
+        videoTitle: videoTitle,
+      });
+
+      if (response && response.ok) {
+        statusEl.textContent = "Preview opened in new tab.";
+        statusEl.className = "status ok";
+        window.close();
+      } else {
+        throw new Error(response?.error || "Failed to open preview");
+      }
     } catch (err) {
       console.error(err);
       statusEl.textContent =
-        "Could not start download. This may be restricted by YouTube/Chrome.";
+        "Could not open preview. This may be restricted by YouTube/Chrome.";
       statusEl.className = "status error";
       btn.disabled = false;
     }

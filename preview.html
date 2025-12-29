@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Content Preview</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #0f172a;
+        color: #e5e7eb;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      .preview-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #1e293b;
+      }
+
+      .header h1 {
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .logo {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: radial-gradient(
+          circle at 30% 30%,
+          #f97316,
+          #ef4444 55%,
+          #991b1b
+        );
+      }
+
+      .video-info {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+      }
+
+      .video-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #f1f5f9;
+      }
+
+      .video-url {
+        font-size: 12px;
+        color: #94a3b8;
+        word-break: break-all;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 48px 24px;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #1e293b;
+        border-top-color: #22c55e;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 16px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        color: #94a3b8;
+        font-size: 14px;
+      }
+
+      .error {
+        background: #7f1d1d;
+        border: 1px solid #991b1b;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 24px 0;
+        color: #fca5a5;
+        white-space: pre-line;
+        line-height: 1.6;
+      }
+
+      .error-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #fee2e2;
+      }
+
+      .insights-section {
+        margin-bottom: 24px;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .section-title::before {
+        content: "";
+        width: 4px;
+        height: 20px;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        border-radius: 2px;
+      }
+
+      .video-title-display {
+        font-size: 24px;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin: 0 0 32px 0;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #22c55e;
+        line-height: 1.4;
+      }
+
+      .main-ideas-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .main-idea-item {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 16px;
+        border-left: 4px solid #22c55e;
+        transition: transform 0.2s, background 0.2s;
+      }
+
+      .main-idea-item:hover {
+        background: #334155;
+        transform: translateX(4px);
+      }
+
+      .main-idea-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin-bottom: 8px;
+      }
+
+      .main-idea-description {
+        font-size: 14px;
+        color: #cbd5e1;
+        line-height: 1.5;
+      }
+
+      .summary-box {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 24px;
+        line-height: 1.8;
+        color: #cbd5e1;
+        white-space: pre-line;
+        font-size: 15px;
+      }
+
+      .topics-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+
+      .topic-tag {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .chapters-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .chapter-item {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 16px;
+        border-left: 3px solid #22c55e;
+        transition: transform 0.2s, background 0.2s;
+      }
+
+      .chapter-item:hover {
+        background: #334155;
+        transform: translateX(4px);
+      }
+
+      .chapter-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .chapter-title {
+        font-weight: 600;
+        color: #f1f5f9;
+        font-size: 14px;
+      }
+
+      .chapter-time {
+        font-size: 12px;
+        color: #94a3b8;
+        background: #0f172a;
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+
+      .chapter-description {
+        font-size: 13px;
+        color: #cbd5e1;
+        line-height: 1.5;
+      }
+
+      .key-points-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .key-point-item {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: start;
+        gap: 12px;
+      }
+
+      .key-point-item::before {
+        content: "→";
+        color: #22c55e;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #1e293b;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
+      }
+
+      .btn-secondary {
+        background: #1e293b;
+        color: #e5e7eb;
+        border: 1px solid #334155;
+      }
+
+      .btn-secondary:hover {
+        background: #334155;
+      }
+
+      .metadata {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        font-size: 12px;
+        color: #94a3b8;
+      }
+
+      .metadata-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .metadata-item strong {
+        color: #cbd5e1;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 48px 24px;
+        color: #94a3b8;
+      }
+
+      .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-container">
+      <div class="header">
+        <h1>
+          <span class="logo"></span>
+          Video Content Preview
+        </h1>
+      </div>
+
+
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing video content...</div>
+      </div>
+
+      <div id="error" class="error" style="display: none">
+        <div class="error-title">Error</div>
+        <div id="errorMessage"></div>
+      </div>
+
+      <div id="insights" style="display: none">
+        <!-- Video Title -->
+        <div class="insights-section">
+          <h1 class="video-title-display" id="displayVideoTitle"></h1>
+        </div>
+
+        <div class="insights-section" id="briefSection" style="display: none">
+          <h2 class="section-title">Video Intelligence Brief</h2>
+          <div class="summary-box" id="briefBox" style="white-space: pre-line;"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="downloadBtn">
+            <span>⬇</span>
+            Download Video
+          </button>
+          <button class="btn btn-secondary" id="closeBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="preview.js"></script>
+  </body>
+</html>
+

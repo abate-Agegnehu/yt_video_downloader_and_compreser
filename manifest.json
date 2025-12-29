@@ -4,6 +4,12 @@
   "version": "1.0.0",
   "description": "Adds a quick-download button on YouTube watch pages.",
   "permissions": ["downloads", "scripting", "tabs"],
+  "web_accessible_resources": [
+    {
+      "resources": ["preview.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "host_permissions": ["https://www.youtube.com/*", "http://localhost:3000/*"],
   "action": {
     "default_title": "Download YouTube video",
